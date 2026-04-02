@@ -1,0 +1,204 @@
+@model IEnumerable<RestaurantSite.Models.Shift>
+@{
+    var employees = ViewBag.Employees as IEnumerable<RestaurantSite.Models.Employee>;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Смены - Ресторан</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-weight: 600;
+            border-bottom: 3px solid #e74c3c;
+            padding-bottom: 10px;
+        }
+        
+        h2 {
+            color: #34495e;
+            margin: 30px 0 20px 0;
+            font-weight: 500;
+        }
+        
+        .form-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+        
+        select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        select:focus {
+            outline: none;
+            border-color: #e74c3c;
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+        }
+        
+        button {
+            background: #e74c3c;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        button:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.3);
+        }
+        
+        table {
+            width: 100%;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+        
+        th {
+            background: #34495e;
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        tr:hover {
+            background: #f5f5f5;
+        }
+        
+        .active-shift {
+            background-color: #e8f5e9;
+        }
+        
+        .end-btn {
+            background: #f39c12;
+            padding: 8px 15px;
+            font-size: 14px;
+        }
+        
+        .end-btn:hover {
+            background: #e67e22;
+        }
+        
+        .back-link {
+            display: inline-block;
+            color: #e74c3c;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 20px;
+            padding: 10px 0;
+        }
+        
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Смены</h1>
+        
+        <div class="form-card">
+            <h2>Начать смену</h2>
+            <form method="post" action="/Admin/StartShift">
+                <select name="employeeId" required>
+                    <option value="">Выберите сотрудника</option>
+                    @if (employees != null)
+                    {
+                        @foreach (var emp in employees)
+                        {
+                            <option value="@emp.Id">@emp.Name — @emp.Position</option>
+                        }
+                    }
+                </select>
+                <button type="submit">▶️ Начать смену</button>
+            </form>
+        </div>
+        
+        <h2>Активные смены</h2>
+        <table>
+            <tr>
+                <th>Сотрудник</th>
+                <th>Начало</th>
+                <th>Действие</th>
+            </tr>
+            @foreach (var shift in Model.Where(s => s.IsActive))
+            {
+                <tr class="active-shift">
+                    <td>@shift.EmployeeName</td>
+                    <td>@shift.StartTime.ToString("dd.MM.yyyy HH:mm")</td>
+                    <td>
+                        <form method="post" action="/Admin/EndShift">
+                            <input type="hidden" name="id" value="@shift.Id">
+                            <button type="submit" class="end-btn">⏹️ Завершить смену</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </table>
+        
+        <h2>Завершенные смены</h2>
+        <table>
+            <tr>
+                <th>Сотрудник</th>
+                <th>Начало</th>
+                <th>Конец</th>
+            </tr>
+            @foreach (var shift in Model.Where(s => !s.IsActive))
+            {
+                <tr>
+                    <td>@shift.EmployeeName</td>
+                    <td>@shift.StartTime.ToString("dd.MM.yyyy HH:mm")</td>
+                    <td>@(shift.EndTime?.ToString("dd.MM.yyyy HH:mm") ?? "-")</td>
+                </tr>
+            }
+        </table>
+        
+        <a href="/Admin" class="back-link">← Назад в панель администратора</a>
+    </div>
+</body>
+</html>

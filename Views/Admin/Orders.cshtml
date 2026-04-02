@@ -1,0 +1,285 @@
+@model IEnumerable<RestaurantSite.Models.Order>
+@{
+    var employees = ViewBag.Employees as IEnumerable<RestaurantSite.Models.Employee>;
+    var menuItems = ViewBag.MenuItems as IEnumerable<RestaurantSite.Models.MenuItem>;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Заказы - Ресторан</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-weight: 600;
+            border-bottom: 3px solid #e74c3c;
+            padding-bottom: 10px;
+        }
+        
+        h2 {
+            color: #34495e;
+            margin: 30px 0 20px 0;
+            font-weight: 500;
+        }
+        
+        .form-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #34495e;
+            font-weight: 600;
+        }
+        
+        select, input[type="checkbox"] {
+            margin-bottom: 15px;
+        }
+        
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        select:focus {
+            outline: none;
+            border-color: #e74c3c;
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+        }
+        
+        .checkbox-group {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            max-height: 200px;
+            overflow-y: auto;
+            border: 2px solid #e0e0e0;
+        }
+        
+        .checkbox-item {
+            padding: 8px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .checkbox-item:last-child {
+            border-bottom: none;
+        }
+        
+        .checkbox-item label {
+            display: inline;
+            margin-left: 5px;
+        }
+        
+        button {
+            background: #e74c3c;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        button:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.3);
+        }
+        
+        table {
+            width: 100%;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            border-collapse: collapse;
+        }
+        
+        th {
+            background: #34495e;
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        tr:hover {
+            background: #f5f5f5;
+        }
+        
+        .status-paid {
+            color: #27ae60;
+            font-weight: 600;
+            background: #e8f5e9;
+            padding: 5px 10px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+        
+        .status-unpaid {
+            color: #e74c3c;
+            font-weight: 600;
+            background: #ffebee;
+            padding: 5px 10px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+        
+        .pay-btn {
+            background: #27ae60;
+            padding: 8px 15px;
+            font-size: 14px;
+        }
+        
+        .pay-btn:hover {
+            background: #219a52;
+        }
+        
+        .back-link {
+            display: inline-block;
+            color: #e74c3c;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 20px;
+            padding: 10px 0;
+        }
+        
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Заказы</h1>
+        
+        <div class="form-card">
+            <h2>Создать заказ</h2>
+            <form method="post" action="/Admin/CreateOrder">
+                <div>
+                    <label>Стол:</label>
+                    <select name="tableNumber" required>
+                        @for (int i = 1; i <= 5; i++)
+                        {
+                            <option value="@i">Стол @i</option>
+                        }
+                    </select>
+                </div>
+                
+                <div>
+                    <label>Блюда (выберите несколько):</label>
+                    <div class="checkbox-group">
+                        @if (menuItems != null)
+                        {
+                            @foreach (var item in menuItems)
+                            {
+                                <div class="checkbox-item">
+                                    <input type="checkbox" name="menuItemIds" value="@item.Id" id="item_@item.Id">
+                                    <label for="item_@item.Id">@item.Name — @item.Price ₽</label>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+                
+                <div>
+                    <label>Официант:</label>
+                    <select name="employeeId">
+                        <option value="">Не выбран</option>
+                        @if (employees != null)
+                        {
+                            @foreach (var emp in employees)
+                            {
+                                <option value="@emp.Id">@emp.Name</option>
+                            }
+                        }
+                    </select>
+                </div>
+                
+                <button type="submit">✅ Создать заказ</button>
+            </form>
+        </div>
+        
+        <h2>Все заказы</h2>
+        <table>
+            <tr>
+                <th>№</th>
+                <th>Стол</th>
+                <th>Сумма</th>
+                <th>Время</th>
+                <th>Официант</th>
+                <th>Статус</th>
+                <th>Действие</th>
+            </tr>
+            @foreach (var order in Model)
+            {
+                <tr>
+                    <td>@order.Id</td>
+                    <td>@order.TableNumber</td>
+                    <td>@order.TotalAmount ₽</td>
+                    <td>@order.OrderTime.ToString("dd.MM.yyyy HH:mm")</td>
+                    <td>@(string.IsNullOrEmpty(order.EmployeeName) ? "-" : order.EmployeeName)</td>
+                    <td>
+                        @if (order.IsPaid)
+                        {
+                            <span class="status-paid">Оплачен</span>
+                        }
+                        else
+                        {
+                            <span class="status-unpaid">Не оплачен</span>
+                        }
+                    </td>
+                    <td>
+                        @if (!order.IsPaid)
+                        {
+                            <form method="post" action="/Admin/PayOrder">
+                                <input type="hidden" name="id" value="@order.Id">
+                                <button type="submit" class="pay-btn">💰 Оплатить</button>
+                            </form>
+                        }
+                    </td>
+                </tr>
+            }
+        </table>
+        
+        <a href="/Admin" class="back-link">← Назад в панель администратора</a>
+    </div>
+</body>
+</html>

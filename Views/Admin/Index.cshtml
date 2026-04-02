@@ -1,0 +1,383 @@
+@using RestaurantSite.Models
+@{
+    ViewData["Title"] = "Администратор";
+    var tables = ViewBag.Tables as List<RestaurantSite.Models.TableViewModel>;
+    if (tables == null)
+    {
+        tables = new List<TableViewModel>();
+    }
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Ресторан</title>
+    <style>
+        /* ========================================
+           СОВРЕМЕННЫЙ ДИЗАЙН ДЛЯ РЕСТОРАННОЙ CRM
+        ======================================== */
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #F5F7FA 0%, #E9ECF2 100%);
+            padding: 24px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 24px;
+            background: linear-gradient(135deg, #FF6B35 0%, #E55A2A 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: inline-block;
+            letter-spacing: -0.5px;
+        }
+        
+        h2 {
+            font-size: 22px;
+            font-weight: 700;
+            color: #2C3E50;
+            margin: 32px 0 20px 0;
+            border-left: 4px solid #FF6B35;
+            padding-left: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .revenue-card {
+            background: linear-gradient(135deg, #FF6B35 0%, #E55A2A 100%);
+            border-radius: 24px;
+            padding: 28px 32px;
+            margin-bottom: 32px;
+            box-shadow: 0 8px 20px rgba(255, 107, 53, 0.25);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            transition: all 0.3s ease;
+        }
+        
+        .revenue-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 28px rgba(255, 107, 53, 0.35);
+        }
+        
+        .revenue-card h3 {
+            font-size: 18px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .revenue-card p {
+            font-size: 52px;
+            font-weight: 800;
+            color: white;
+            margin: 0;
+            letter-spacing: -1px;
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 32px;
+            background: white;
+            padding: 8px;
+            border-radius: 60px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        
+        .nav-button {
+            background: transparent;
+            color: #6C757D;
+            padding: 12px 32px;
+            text-decoration: none;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .nav-button:hover {
+            background: #F8F9FA;
+            color: #FF6B35;
+            transform: translateY(-2px);
+        }
+        
+        .tables-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 24px;
+            margin-top: 20px;
+        }
+        
+        .table-card {
+            background: white;
+            border-radius: 20px;
+            padding: 24px 20px;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .table-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            transition: height 0.3s ease;
+        }
+        
+        .table-card.free::before {
+            background: #2ECC71;
+        }
+        
+        .table-card.occupied::before {
+            background: #FF6B35;
+        }
+        
+        .table-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 16px 32px rgba(0, 0, 0, 0.12);
+        }
+        
+        .table-card h3 {
+            font-size: 28px;
+            font-weight: 800;
+            color: #2C3E50;
+            margin-bottom: 16px;
+        }
+        
+        .status-free {
+            background: #E8F5E9;
+            color: #2ECC71;
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 700;
+            display: inline-block;
+        }
+        
+        .status-busy {
+            background: #FFEEE8;
+            color: #FF6B35;
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 700;
+            display: inline-block;
+        }
+        
+        .table-order-info {
+            font-size: 12px;
+            color: #6C757D;
+            margin-top: 14px;
+            padding-top: 12px;
+            border-top: 1px solid #E9ECF2;
+            font-weight: 500;
+        }
+        
+        @@keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .revenue-card {
+            animation: fadeInUp 0.5s ease-out;
+        }
+        
+        .nav-menu {
+            animation: fadeInUp 0.5s ease-out 0.1s;
+            animation-fill-mode: backwards;
+        }
+        
+        .tables-grid {
+            animation: fadeInUp 0.5s ease-out 0.2s;
+            animation-fill-mode: backwards;
+        }
+        
+        .table-card {
+            animation: fadeInUp 0.4s ease-out;
+            animation-fill-mode: backwards;
+        }
+        
+        .table-card:nth-child(1) { animation-delay: 0.05s; }
+        .table-card:nth-child(2) { animation-delay: 0.1s; }
+        .table-card:nth-child(3) { animation-delay: 0.15s; }
+        .table-card:nth-child(4) { animation-delay: 0.2s; }
+        .table-card:nth-child(5) { animation-delay: 0.25s; }
+        .table-card:nth-child(6) { animation-delay: 0.3s; }
+        .table-card:nth-child(7) { animation-delay: 0.35s; }
+        .table-card:nth-child(8) { animation-delay: 0.4s; }
+        
+        @@media (max-width: 768px) {
+            body {
+                padding: 16px;
+            }
+            
+            h1 {
+                font-size: 26px;
+            }
+            
+            h2 {
+                font-size: 20px;
+                margin: 24px 0 16px 0;
+            }
+            
+            .revenue-card {
+                padding: 20px;
+                flex-direction: column;
+                text-align: center;
+                gap: 12px;
+            }
+            
+            .revenue-card p {
+                font-size: 40px;
+            }
+            
+            .nav-menu {
+                border-radius: 20px;
+                padding: 12px;
+                gap: 8px;
+            }
+            
+            .nav-button {
+                padding: 10px 20px;
+                font-size: 13px;
+                flex: 1;
+                justify-content: center;
+            }
+            
+            .tables-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 16px;
+            }
+            
+            .table-card {
+                padding: 18px 12px;
+            }
+            
+            .table-card h3 {
+                font-size: 22px;
+            }
+            
+            .status-free, .status-busy {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+        }
+        
+        @@media (min-width: 769px) and (max-width: 1024px) {
+            .tables-grid {
+                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+                gap: 20px;
+            }
+        }
+        
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #F1F1F1;
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #FF6B35;
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #E55A2A;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🍽️ Панель администратора</h1>
+        
+        <div class="revenue-card">
+            <h3>
+                <span>💰</span> Выручка сегодня
+            </h3>
+            <p>@ViewBag.TodayRevenue ₽</p>
+        </div>
+        
+        <div class="nav-menu">
+            <a href="/Admin/Menu" class="nav-button">
+                <span>📋</span> Меню
+            </a>
+            <a href="/Admin/Employees" class="nav-button">
+                <span>👥</span> Сотрудники
+            </a>
+            <a href="/Admin/Shifts" class="nav-button">
+                <span>🕒</span> Смены
+            </a>
+            <a href="/Admin/Orders" class="nav-button">
+                <span>📦</span> Заказы
+            </a>
+        </div>
+        
+        <h2>
+            <span>🪑</span> Столы
+        </h2>
+        <div class="tables-grid">
+            @foreach (var table in tables)
+            {
+                <div class="table-card @(table.IsOccupied ? "occupied" : "free")">
+                    <h3>Стол @table.TableNumber</h3>
+                    @if (table.IsOccupied)
+                    {
+                        <span class="status-busy">🔴 Занят</span>
+                        <div class="table-order-info">
+                            📋 Заказ №@table.OrderId
+                        </div>
+                    }
+                    else
+                    {
+                        <span class="status-free">🟢 Свободен</span>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,359 @@
+/* ========================================
+   СОВРЕМЕННЫЙ СТИЛЬ ДЛЯ РЕСТОРАННОЙ CRM
+   Популярный дизайн (как Poster / Toast)
+======================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #F5F7FA 0%, #E9ECF2 100%);
+    color: #2C3E50;
+    min-height: 100vh;
+}
+
+/* Контейнер */
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 24px;
+}
+
+/* Шапка */
+.header {
+    background: white;
+    border-radius: 20px;
+    padding: 20px 32px;
+    margin-bottom: 32px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.header h1 {
+    font-size: 24px;
+    color: #FF6B35;
+}
+
+/* Карточка выручки */
+.revenue-card {
+    background: linear-gradient(135deg, #FF6B35 0%, #E55A2A 100%);
+    border-radius: 20px;
+    padding: 24px 32px;
+    margin-bottom: 32px;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.revenue-card span {
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.revenue-card .amount {
+    font-size: 48px;
+    font-weight: 800;
+}
+
+/* Навигация (кнопки Меню, Сотрудники и т.д.) */
+.nav-links {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 32px;
+    background: white;
+    padding: 12px 20px;
+    border-radius: 60px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.nav-link {
+    padding: 10px 24px;
+    border-radius: 40px;
+    text-decoration: none;
+    font-weight: 600;
+    color: #6C757D;
+    transition: all 0.3s ease;
+    background: transparent;
+}
+
+.nav-link:hover {
+    background: #F8F9FA;
+    color: #FF6B35;
+}
+
+/* Секции (белые карточки) */
+.section {
+    background: white;
+    border-radius: 20px;
+    padding: 24px;
+    margin-bottom: 32px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.section-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    border-left: 4px solid #FF6B35;
+    padding-left: 16px;
+    color: #2C3E50;
+}
+
+/* Сетка столов */
+.tables-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 20px;
+}
+
+/* Карточка стола */
+.table-card {
+    background: white;
+    border: 1px solid #E9ECF2;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.table-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    border-color: #FF6B35;
+}
+
+.table-card.free {
+    border-left: 4px solid #2ECC71;
+}
+
+.table-card.occupied {
+    border-left: 4px solid #FF6B35;
+    background: #FFF5F2;
+}
+
+.table-number {
+    font-size: 24px;
+    font-weight: 800;
+    margin-bottom: 8px;
+}
+
+.table-status {
+    font-size: 13px;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 30px;
+    display: inline-block;
+}
+
+.status-free {
+    background: #E8F5E9;
+    color: #2ECC71;
+}
+
+.status-occupied {
+    background: #FFEEE8;
+    color: #FF6B35;
+}
+
+/* Таблицы */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    overflow-x: auto;
+    display: block;
+}
+
+th {
+    text-align: left;
+    padding: 14px 12px;
+    background: #F8F9FA;
+    font-weight: 600;
+    color: #6C757D;
+    font-size: 13px;
+}
+
+td {
+    padding: 14px 12px;
+    border-bottom: 1px solid #E9ECF2;
+    font-size: 14px;
+}
+
+tr:hover {
+    background: #F8F9FA;
+}
+
+/* Формы */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #E9ECF2;
+    border-radius: 12px;
+    font-size: 14px;
+    font-family: inherit;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: #FF6B35;
+    box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+}
+
+/* Кнопки */
+.btn {
+    padding: 12px 24px;
+    border-radius: 40px;
+    font-weight: 600;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-block;
+    text-decoration: none;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #FF6B35 0%, #E55A2A 100%);
+    color: white;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(255, 107, 53, 0.4);
+}
+
+.btn-danger {
+    background: #E74C3C;
+    color: white;
+}
+
+.btn-danger:hover {
+    background: #c0392b;
+}
+
+.btn-sm {
+    padding: 6px 16px;
+    font-size: 12px;
+}
+
+/* Чекбоксы для блюд */
+.dishes-list {
+    background: #F8F9FA;
+    border-radius: 12px;
+    padding: 16px;
+    margin: 16px 0;
+}
+
+.dish-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid #E9ECF2;
+}
+
+.dish-item:last-child {
+    border-bottom: none;
+}
+
+.dish-item input {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+/* Статусы заказов */
+.status-paid {
+    background: #E8F5E9;
+    color: #2ECC71;
+    padding: 4px 12px;
+    border-radius: 30px;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.status-unpaid {
+    background: #FFEEE8;
+    color: #FF6B35;
+    padding: 4px 12px;
+    border-radius: 30px;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-block;
+}
+
+/* Ссылка назад */
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #6C757D;
+    text-decoration: none;
+    margin-top: 20px;
+    font-weight: 500;
+}
+
+.back-link:hover {
+    color: #FF6B35;
+}
+
+/* Адаптивность для телефонов */
+@media (max-width: 768px) {
+    .container {
+        padding: 16px;
+    }
+    
+    .tables-grid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 12px;
+    }
+    
+    .revenue-card .amount {
+        font-size: 32px;
+    }
+    
+    .header h1 {
+        font-size: 20px;
+    }
+    
+    .nav-links {
+        border-radius: 16px;
+        overflow-x: auto;
+    }
+    
+    .nav-link {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+    
+    table {
+        font-size: 12px;
+    }
+    
+    th, td {
+        padding: 10px 8px;
+    }
+}
